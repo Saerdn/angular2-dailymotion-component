@@ -29,8 +29,6 @@ export class DailymotionplayerComponent implements OnInit {
         let elementId = this.dailymotionPlayer.generateUUID();
         this.playercontainer.nativeElement.setAttribute('id', elementId);
 
-        console.log(elementId);
-
         // Define configuration for the player
         let playerConfig = {
             elementId: elementId,
