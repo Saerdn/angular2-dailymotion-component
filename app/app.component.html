@@ -1,0 +1,9 @@
+<dailymotionplayer
+        [videoId]="id"
+        [width]="'320px'"
+        [height]="'280px'"
+        (playerStream)="onReady($event, id)"
+        >
+</dailymotionplayer>
+<input type="button" value="play" (click)="playVideo(id)">
+<input type="button" value="pause" (click)="pauseVideo(id)">
