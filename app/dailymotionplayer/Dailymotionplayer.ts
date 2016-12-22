@@ -1,9 +1,6 @@
 /**
  * Class representing the Dailymotion player.
  */
-/**
- * Class representing the Dailymotion player.
- */
 
 import { NgZone, Injectable } from "@angular/core";
 import { PlayerConfig } from "./playerconfig.interface";
