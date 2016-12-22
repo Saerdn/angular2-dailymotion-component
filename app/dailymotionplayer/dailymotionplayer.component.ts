@@ -40,8 +40,10 @@ export class DailymotionplayerComponent implements OnInit {
             playerStream: this.playerStream
         };
 
+        // Load the API (into the DOM) and provide the DM object
         this.dailymotionService.loadApi();
 
+        // Load the player and emit it out to the parent component
         this.dailymotionPlayer.load(playerConfig);
     }
 
