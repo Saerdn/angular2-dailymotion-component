@@ -3,6 +3,8 @@
  */
 
 import { NgZone, Injectable } from "@angular/core";
+import { isUndefined } from "util";
+
 import { PlayerConfig } from "./playerconfig.interface";
 import { DailymotionApiService } from "./dailymotion-api.service";
 
@@ -17,15 +19,23 @@ export class Dailymotionplayer {
      * (Wrapper function to) Load a new player using the dailymotion JS api
      */
     load( playerConfig: PlayerConfig ) {
-        // Subscribe to the emitter who emits the window.DM OBJECT AS SOON AS IT IS LOADED/AVAILABLE.
-        // "data = window.DM" => We actually don't need to use it here, just make sure the function is called AFTER
-        // the OBJECT is available
-        this.dailmyotionApiService.apiEmitter.subscribe(
-            data => {
-                // Using this.zone.run() causes Angular to perform change detection which will update the view
-                this.zone.run(() => this.newPlayer( playerConfig ) );
-            }
-        );
+
+        if( isUndefined(window.DM) ) {
+            // Subscribe to the emitter who emits the window.DM OBJECT AS SOON AS IT IS LOADED/AVAILABLE.
+            // "data = window.DM" => We actually don't need to use it here, just make sure the function is called AFTER
+            // the OBJECT is available
+            this.dailmyotionApiService.apiEmitter.subscribe(
+                data => {
+                    // Using this.zone.run() causes Angular to perform change detection which will update the view
+                    this.zone.run(() => this.newPlayer( playerConfig ) );
+                }
+            );
+        } else {
+            // The DM class is already loaded, no need to wait for it to get streamed
+            this.zone.run(() => this.newPlayer( playerConfig ) );
+
+        }
+
     }
 
     /**
@@ -59,7 +69,7 @@ export class Dailymotionplayer {
     generateUUID () {
         var d = new Date().getTime();
         if(window.performance && typeof window.performance.now === "function"){
-            d += performance.now(); //use high-precision timer if available
+            d += performance.now(); // use high-precision timer if available
         }
         var uuid = 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
             var r = (d + Math.random()*16)%16 | 0;
